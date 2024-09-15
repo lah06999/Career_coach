@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="quiz.css"> <!-- Link to your CSS file -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #3052f5;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #2c46db;
+        }
+        .result {
+            display: none;
+        }
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Career Quiz</h1>
+    <div class="quiz" id="quiz"></div>
+    <button class="btn" id="submit">Submit Quiz</button>
+    <div class="result" id="result">
+        <h2>Your Results</h2>
+        <canvas id="resultsChart"></canvas>
+        <p id="strengths"></p>
+        <p id="weaknesses"></p>
+    </div>
+</div>
+
+<script>
+// Quiz questions and answers
+const quizData = [
+    {
+        question: "What is your favorite subject?",
+        options: ["Math", "Science", "Arts", "Sports"],
+        answer: 0 // Assuming Math is preferred
+    },
+    {
+        question: "What type of activities do you enjoy?",
+        options: ["Outdoor", "Indoor", "Creative", "Technical"],
+        answer: 3 // Assuming Technical is preferred
+    },
+    {
+        question: "What do you value the most in a job?",
+        options: ["Creativity", "Stability", "Growth", "Flexibility"],
+        answer: 2 // Assuming Growth is preferred
+    }
+];
+
+const quizContainer = document.getElementById('quiz');
+const submitButton = document.getElementById('submit');
+const resultContainer = document.getElementById('result');
+const strengthsText = document.getElementById('strengths');
+const weaknessesText = document.getElementById('weaknesses');
+
+let userAnswers = [];
+
+// Function to generate quiz questions
+function generateQuiz() {
+    quizData.forEach((data, index) => {
+        const questionElement = document.createElement('div');
+        questionElement.classList.add('question');
+        questionElement.innerHTML = `
+            <h3>${data.question}</h3>
+            ${data.options.map((option, i) => `
+                <label>
+                    <input type="radio" name="question${index}" value="${i}">
+                    ${option}
+                </label>
+            `).join('')}
+        `;
+        quizContainer.appendChild(questionElement);
+    });
+}
+
+// Function to calculate results and display the graph
+function calculateResults() {
+    let strengths = new Array(quizData.length).fill(0);
+    let weaknesses = new Array(quizData.length).fill(0);
+
+    userAnswers.forEach((answer, index) => {
+        if (answer == quizData[index].answer) {
+            strengths[index]++;
+        } else {
+            weaknesses[index]++;
+        }
+    });
+
+    const ctx = document.getElementById('resultsChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: quizData.map((data) => data.question),
+            datasets: [{
+                label: 'Strengths',
+                data: strengths,
+                backgroundColor: '#3052f5',
+            }, {
+                label: 'Weaknesses',
+                data: weaknesses,
+                backgroundColor: '#ff6384',
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    strengthsText.innerText = 'Strengths: ' + strengths.reduce((a, b) => a + b, 0);
+    weaknessesText.innerText = 'Weaknesses: ' + weaknesses.reduce((a, b) => a + b, 0);
+}
+
+// Event listener for the submit button
+submitButton.addEventListener('click', () => {
+    const answers = document.querySelectorAll('input[type="radio"]:checked');
+    userAnswers = Array.from(answers).map(answer => parseInt(answer.value));
+    
+    if (userAnswers.length < quizData.length) {
+        alert('Please answer all questions!');
+        return;
+    }
+    
+    quizContainer.style.display = 'none';
+    resultContainer.style.display = 'block';
+    calculateResults();
+});
+
+// Initialize quiz on page load
+generateQuiz();
+</script>
+<btn class="button" href="/index.html">Go Back
+
+</btn>
+</body>
+</html>

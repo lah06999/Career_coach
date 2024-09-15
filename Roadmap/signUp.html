@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Career Coach</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+
+        form {
+            width: 90%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label, input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .message {
+            margin-top: 15px;
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/index.html">
+          <img src="/darklogo.png" alt="Career Coach" width="100" style="
+              margin-top: 50px;
+              cursor: pointer;
+          ">
+      </a>
+    <h1>Career Coach - Sign Up</h1>
+</header>
+
+<form id="signUpForm" action="signup.php" method="POST">
+    <h2>Sign Up</h2>
+    <label for="name">Full Name:</label>
+    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+
+    <button type="submit">Sign Up</button>
+
+    <p class="message" id="signupMessage"></p>
+</form>
+
+
+<script>
+    function submitSignUp(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const message = document.getElementById('signupMessage');
+
+        // Simple validation
+        if (password !== confirmPassword) {
+            message.textContent = "Passwords do not match!";
+            return;
+        }
+
+        // Storing data in localStorage (simulate backend storage)
+        localStorage.setItem(email, JSON.stringify({ name, email, password }));
+
+        // Redirect to dashboard or login page
+        window.location.href = "dashboard.html";
+    }
+</script>
+
+</body>
+</html>
